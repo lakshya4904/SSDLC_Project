@@ -3,11 +3,12 @@
   "version": "1.0.0",
   "main": "index.js",
   "type": "module",
+
   "scripts": {
-    "dev": "next dev",
     "build": "next build",
-    "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "start": "backend/app.js",
+    "dev": "nodemon backend/app.js"
   },
   "keywords": [],
   "author": "",

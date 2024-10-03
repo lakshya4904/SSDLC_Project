@@ -1,0 +1,30 @@
+
+.menuToggleWrapper {
+  @apply flex gap-3;
+}
+
+.menuToggleButton{
+  @apply block sm:!hidden ; 
+  /*.sm\:hidden  || .\32sm\:block  ||  .\32xl\:hidden */
+
+  /* display: block;
+  @media (min-width: 376px) { 
+      display: none !important;
+  } */
+}
+
+.menuBrand{
+  @apply block !text-xl font-extrabold  text-blue-600 hover:text-purple-500 ease-in-out;
+}
+.menu{
+  @apply !hidden sm:!flex gap-3 ;
+}
+.menuSearchBar{
+  @apply max-w-full sm:max-w-[10rem] h-10 text-small font-normal items-center flex;
+}
+
+.item{
+  @apply 
+  hidden 
+  sm:flex hover:underline hover:text-blue-500;
+}
