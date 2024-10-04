@@ -1,7 +1,9 @@
-import { Button, Card, CardBody, CardFooter, CardHeader } from '@nextui-org/react'
-import React from 'react'
-import Image from 'next/image'
-import { FaStar } from "react-icons/fa"
+'use client';
+import { Button, Card, CardBody, CardFooter, CardHeader, Chip } from '@nextui-org/react';
+import React from 'react';
+import Image from 'next/image';
+import { FaRegBookmark, FaStar } from "react-icons/fa";
+import Link from 'next/link';
 
 interface Book {
   id: number;
@@ -16,25 +18,26 @@ interface BookCardProps {
 }
 
 const BookCard: React.FC<BookCardProps> = ({ book }) => {
-
+  
 
   return (
-    <div className='container '>
-      <Card isFooterBlurred className="w-full shadow-lg hover:shadow-xl transition-shadow duration-300 m-4 " radius='lg'>
+    <Link href={`book/${book.id}`} >
+      <Card isFooterBlurred className="w-full h-full shadow-lg hover:shadow-xl transition-shadow container hover:scale-110 ease-in-out duration-300 " radius='lg'>
         <CardHeader className="absolute z-10 flex justify-between items-start">
           <div className='flex-col'>
-          <p className=" uppercase font-bold">New</p>
+            
+          <Chip className=" uppercase font-bold" color='default' radius='full'>New</Chip>
           {/* <h4 className=" font-medium text-lg">Acme camera</h4> */}
           </div>
-          <div className='flex items-center px-4'>
-            <FaStar/>
-            <p>&nbsp;{"4.5"}</p>
-          </div>
+          <Chip className='px-2 text-white' color='primary' radius='md' startContent={<FaStar/>}>
+            
+            <p>{book.rating}</p>
+          </Chip>
         </CardHeader>
         {/* <CardBody className=""> */}
         {/* Image of the Book */}
         <Image
-          src="https://nextui.org/images/card-example-6.jpeg"
+          src={book.coverImage}
           alt={book.title}
           width={200}
           height={300}
@@ -42,19 +45,19 @@ const BookCard: React.FC<BookCardProps> = ({ book }) => {
           className="z-0 w-full h-full scale-125 -translate-y-6 object-cover flex-wrap "
         />
         {/* </CardBody> */}
-        <CardFooter className="flex absolute bottom-0 justify-between items-center p-4">
+        <CardFooter className="flex absolute bottom-0 justify-between items-center p-4 bg-default-100 opacity-90">
           {/* Book Name */}
-          <div>
-            <p className="">{book.title?book.title:"Book Title"}</p>
-            <p className="">{book.author?book.author:"Book Author"}</p>
+          <div className={`w-4/6 overflow-hidden`}>
+            <h6 className="line truncate">{book.title?book.title:"Book Title"}</h6>
+            <p className=" text-sm truncate">{book.author?book.author:"Book Author"}</p>
           </div>
-          <Button className="text-tiny" color="primary" radius="full" size="sm">
-            Notify Me
+          <Button className="text-tiny w-2/6 ml-4 text-white" color="primary" radius="full" size="sm">
+          <FaRegBookmark />
           </Button>
           {/* <p className="font-semibold text-center text-lg">{"bookName"}</p> */}
         </CardFooter>
       </Card>
-    </div>
+    </Link>
   )
 }
 
