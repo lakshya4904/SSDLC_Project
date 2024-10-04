@@ -20,7 +20,7 @@
   @apply !hidden sm:!flex gap-3 ;
 }
 .menuSearchBar{
-  @apply max-w-full sm:max-w-[10rem] h-10 text-small font-normal items-center flex;
+  @apply w-fit text-small font-normal items-center flex;
 }
 
 .item{
