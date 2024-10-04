@@ -37,13 +37,13 @@ export default function NavBar(props: SwitchProps) {
     { label: "Bookmarks", href: "/Bookmarks", display: "block", color: "default" },
     { label: "Settings", href: "/Settings", display: "block", color: "default" },
     { label: "Dashboard", href: "/Dashboard", display: "hidden", color: "default" },
-    { label: "Log Out", href: "/", display: "block", color: "danger" },
+    // { label: "Log Out", href: "/", display: "block", color: "danger" },
   ];
 
   return (
 
-    <Navbar onMenuOpenChange={setIsMenuOpen} isBordered maxWidth="full" className="">
-      <NavbarContent as={"div"} className={`${styles.menuToggleWrapper} ${isSelected ? " hidden" : ""}`}>
+    <Navbar onMenuOpenChange={setIsMenuOpen} isBordered maxWidth="full" className="!flex">
+      <NavbarContent as={"div"} className={`${styles.menuToggleWrapper} !flex-auto ${isSelected ? " hidden" : ""}`}>
         <NavbarMenuToggle
           aria-label={isMenuOpen ? "Close menu" : "Open menu"}
           className={`${styles.menuToggleButton} ${isSelected ? "hidden" : ""}`}
@@ -53,11 +53,11 @@ export default function NavBar(props: SwitchProps) {
         </NavbarItem>
       </NavbarContent>
 
-      <NavbarContent as={"div"} className={`${styles.menu} ${isSelected ? "hidden" : ""}`} justify="start">
+      <NavbarContent as={"div"} className={`${styles.menu} !flex-auto ${isSelected ? "hidden" : ""}`} justify="start">
         {links.map((link) => (
           <NavbarItem key={link.href} className={`${link.display} ${isSelected ? "hidden" : ""}`}>
             <Link
-              className={`${link.display} ${link.href === currentPath ? 'text-primary' : 'text-default'} ${styles.item} ${isSelected ? "hidden" : ""}`}
+              className={`${link.display} ${link.href === currentPath ? 'text-primary' : 'text-default-900'} ${styles.item} ${isSelected ? "hidden" : ""}`}
               href={link.href}
               size="lg"
             >
@@ -77,7 +77,7 @@ export default function NavBar(props: SwitchProps) {
                 </NavbarItem> */}
       </NavbarContent>
 
-      <NavbarContent as="div" >
+      <NavbarContent as="div" className={`!flex-auto`} >
         <Input
           className={`${styles.menuSearchBar} `}
           placeholder="Type to search..."
@@ -86,7 +86,7 @@ export default function NavBar(props: SwitchProps) {
         />
       </NavbarContent >
 
-      <NavbarContent as="div" className="items-center" justify="end">
+      <NavbarContent as="div" className="items-center !flex-auto" justify="end">
 
         {/* Search switch for mobiles*/}
         {/* <Component {...getBaseProps()} >
@@ -134,7 +134,7 @@ export default function NavBar(props: SwitchProps) {
             <DropdownSection>
 
               {AvatarItems.map((item) => (
-                <DropdownItem key={item.href} href={item.href} className={`${item.display} ${item.href === currentPath ? 'text-primary' : ''}`} color={item.color}>
+                <DropdownItem key={item.href} href={item.href} className={`${item.display} ${item.href === currentPath ? 'text-primary' : 'text-default-900'}`} color={item.color}>
                   {/* <Link
                             color={"foreground"}
                             className="w-full"
@@ -147,26 +147,26 @@ export default function NavBar(props: SwitchProps) {
               ))}
             </DropdownSection>
 
-            {/* <DropdownItem key="logout" color="danger">
+            <DropdownItem key="logout" color="danger">
                 Log Out
-              </DropdownItem> */}
+              </DropdownItem>
           </DropdownMenu>
         </Dropdown>
-        <NavbarItem className="lg:flex hidden">
+        {/* <NavbarItem className="lg:flex hidden">
           <Link href="#">Login</Link>
         </NavbarItem>
         <NavbarItem className="hidden">
           <Button as={Link} color="primary" href="#" variant="flat">
             Sign Up
           </Button>
-        </NavbarItem>
+        </NavbarItem> */}
       </NavbarContent>
 
       <NavbarMenu className={styles.menuToggleButton}>
         {links.map((link) => (
           <NavbarMenuItem key={link.href} className={`${link.display} `}>
             <Link
-              className={`${link.display} ${link.href === currentPath ? 'text-primary' : 'text-default'} ${styles.item}`}
+              className={`${link.display} ${link.href === currentPath ? 'text-primary' : 'text-default-900'} ${styles.item}`}
               href={link.href}
               size="lg"
             >

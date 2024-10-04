@@ -4,10 +4,10 @@ const { nextui } = require("@nextui-org/react");
 
 const config: Config = {
   content: [
-    // "./src/**/*.{html,js,ts,jsx,tsx,mdx,css}",
-    //"./src/pages/**/*.{js,ts,jsx,tsx,mdx,css}",
-    // "./src/components/**/*.{js,ts,jsx,tsx,mdx,css}",
-    // "./src/app/**/*.{js,ts,jsx,tsx,mdx,css}",
+     "./src/**/*.{html,js,ts,jsx,tsx,mdx,css}",
+     "./src/pages/**/*.{js,ts,jsx,tsx,mdx,css}",
+     "./src/components/**/*.{js,ts,jsx,tsx,mdx,css}",
+     "./app/**/*.{js,ts,jsx,tsx,mdx,css}",
      "./node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx,css}",
   ],
   theme: {
