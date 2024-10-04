@@ -22,6 +22,43 @@ header{
   @apply !px-0;
 }
 
+/* h1, h2, h3, h4, h5, h6 {
+  @apply font-bold ;
+} */
+
+h1 {
+  @apply text-4xl sm:text-5xl font-bold;
+}
+
+h2 {
+  @apply text-3xl sm:text-4xl font-bold;
+}
+
+h3 {
+  @apply text-2xl sm:text-3xl font-bold;
+}
+
+h4 {
+  @apply text-xl sm:text-2xl font-bold;
+}
+
+h5 {
+  @apply text-lg sm:text-xl font-bold;
+}
+
+h6 {
+  @apply text-base sm:text-lg font-bold;
+}
+
+/* p {
+  @apply ;
+} */
+
+a {
+  @apply hover:underline;
+}
+
+
 @layer utilities {
   .text-balance {
     text-wrap: balance;

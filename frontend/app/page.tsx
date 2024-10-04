@@ -108,11 +108,12 @@ const books = [
 
 export default function Home() {
   return (
-    <main className="container">
+    <main className="">
       {/* <h1>Hello World</h1> */}
 
-      <div className="p-8 m-10">
-        <h1 className="text-3xl font-bold !mb-8">Book Library</h1>
+      <div className="">
+        <h3 className="my-4 border-default border-b-2">Recents</h3>
+        <br className=" "/>
         <div className={styles.bookRoll}>
           {books.map((book) => (
             <BookCard key={book.id} book={book} />
