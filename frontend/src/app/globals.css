@@ -15,7 +15,7 @@
 }
 
 body {
-  @apply !w-11/12 sm:w-10/12 !mx-auto;
+  @apply !w-11/12 sm:w-10/12 !mx-auto ;
 }
 
 header{

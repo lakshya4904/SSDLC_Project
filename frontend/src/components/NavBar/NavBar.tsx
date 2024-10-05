@@ -1,15 +1,45 @@
 'use client';
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Navbar, NavbarBrand, NavbarContent, NavbarItem, NavbarMenuToggle, NavbarMenu, NavbarMenuItem, Link, Button, DropdownItem, DropdownTrigger, DropdownMenu, Avatar, Dropdown, Input, SwitchProps, useSwitch, VisuallyHidden, DropdownSection } from "@nextui-org/react";
 import { SearchIcon } from "./SearchIcon";
 import { ThemeSwitcher } from "../ThemeSwitcher";
 import { usePathname } from "next/navigation";
 import styles from "./NavBar.module.css";
-import { FaSearch } from "react-icons/fa";
-import { FaXmark } from "react-icons/fa6";
+import { useRouter } from 'next/navigation';
+import { useUser } from "@/app/context/UserContext";
 
 export default function NavBar(props: SwitchProps) {
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
+
+  const { user, logout, checkUser } = useUser();
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false); // State to control dropdown visibility
+  const router = useRouter();
+
+  // Effect to reset the dropdown state when user logs out or changes
+  useEffect(() => {
+    if (!user) {
+      setIsDropdownOpen(false); // Close dropdown if user logs out
+    }
+  }, [user]);
+
+  const handleCheckUser = () => {
+    if (checkUser()){
+      console.log(user);
+      setIsDropdownOpen(true);
+    } 
+    else {
+      // Redirect to login if the user is not logged in
+      // This is a place to use next/navigation's redirect()
+      setIsDropdownOpen(false);
+      router.push("/login");
+    }
+  };
+
+  const handleLogout = () => {
+    logout(); // Perform logout logic
+    setIsDropdownOpen(false); // Close dropdown when logging out
+    //router.push('/login'); // Redirect to login page
+  };
 
   const currentPath = usePathname();
   console.log(currentPath);
@@ -117,40 +147,39 @@ export default function NavBar(props: SwitchProps) {
         <Dropdown placement="bottom-end" className={isSelected ? "hidden" : ""} >
           <DropdownTrigger>
             <Avatar
-              isBordered //#494:user.username? false : true
-              showFallback //#494:user.username? false : true
+              isBordered = {user? true : false}
+              showFallback  = {user? true : false}
               as="button"
               className={`transition-transform ${isSelected ? "hidden" : ""}`}
-              color="primary" //#494:user.username? "primary" : "default"
-              //name="Jason Hughes"
+              color = {user? "primary" : "default"}
+              name={user?.username}
               size="sm"
-              src="https://i.pravatar.cc/150?u=a042581f4e29026704d"
+              onClick={handleCheckUser}
+              src={user?.profileImageURL}
             />
           </DropdownTrigger>
-          <DropdownMenu aria-label="Profile Actions" variant="flat">
-            <DropdownItem >
-                <ThemeSwitcher/>
+          {isDropdownOpen && (
+        <DropdownMenu aria-label="Profile Actions" variant="flat">
+          <DropdownItem>
+            <ThemeSwitcher />
+          </DropdownItem>
+          <DropdownSection>
+            {AvatarItems.map((item) => (
+              <DropdownItem
+                key={item.href}
+                href={item.href}
+                className={`${item.display} ${item.href === currentPath ? 'text-primary' : 'text-default-900'}`}
+                color={item.color}
+              >
+                {item.label}
               </DropdownItem>
-            <DropdownSection>
-
-              {AvatarItems.map((item) => (
-                <DropdownItem key={item.href} href={item.href} className={`${item.display} ${item.href === currentPath ? 'text-primary' : 'text-default-900'}`} color={item.color}>
-                  {/* <Link
-                            color={"foreground"}
-                            className="w-full"
-                            href={item.href}
-                            size="lg"
-                        >
-                        </Link> */}
-                  {item.label}
-                </DropdownItem>
-              ))}
-            </DropdownSection>
-
-            <DropdownItem key="logout" color="danger">
-                Log Out
-              </DropdownItem>
-          </DropdownMenu>
+            ))}
+          </DropdownSection>
+          <DropdownItem key="logout" color="danger" onClick={handleLogout}>
+            Log Out
+          </DropdownItem>
+        </DropdownMenu>
+      )}
         </Dropdown>
         {/* <NavbarItem className="lg:flex hidden">
           <Link href="#">Login</Link>
