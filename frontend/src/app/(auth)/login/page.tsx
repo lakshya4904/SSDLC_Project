@@ -5,7 +5,6 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import { useUser } from '@/app/context/UserContext';
-import { User } from '@/app/types/user';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -17,26 +16,38 @@ const Login = () => {
 
   const toggleVisibility = () => setIsVisible(!isVisible);
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     // Mock login authentication
     console.log(`email:${email} pwd: ${password}`);
-    if (email === 'a' && password === 'a') {
 
-      const mockUser: User = {
-        id: 1,
-        username: 'John Doe',
-        profileImageURL: 'https://i.pravatar.cc/150?u=a042581f4e29026704d',
-        email: email,
-        password: password,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        type: ''
-      };
+    const response = await fetch(`http://localhost:3000/api/users/${email}`,{
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    const user = await response.json();
 
-      setUser(mockUser); // Save user in global context and localStorage
+    if (email === user.result.email && password == user.result.password) {
+
+      // const mockUser: User = {
+      //   id: 1,
+      //   username: 'John Doe',
+      //   profileImageURL: 'https://i.pravatar.cc/150?u=a042581f4e29026704d',
+      //   email: email,
+      //   password: password,
+      //   createdAt: new Date(),
+      //   updatedAt: new Date(),
+      //   type: ''
+      // };
+
+      // console.log('correct email and password');
+      setUser(user); // Save user in global context and localStorage
       router.push('/'); // Redirect to homepage or dashboard after login
+
     } else {
+      // console.log('Invalid email or password');
       setError('Invalid email or password');
     }
   };
@@ -100,6 +111,6 @@ export default Login;
 // }
 
 function setError(arg0: string) {
-  throw new Error('Function not implemented.');
+  throw new Error(arg0 ||'Function not implemented.');
 }
 

@@ -2,76 +2,54 @@
 import { useState } from 'react';
 import { Input, Button, Textarea, Card } from "@nextui-org/react";
 import styles from "./createBook.module.css";
+import { Book, BookProps, initBook } from '@/app/types/book';
+// import Book from '@/lib/models/book';
 
 const createBookPage = () => {
-  const [newBook, setNewBook] = useState({
-    title: '',
-    authorId: '',
-    publisherId: '',
-    categoryId: '',
-    seriesId: '',
-    publicationDate: '',
-    isbn: '',
-    summary: '',
-    coverImageUrl: '',
-    fileUrl: '',
-    fileSize: '',
-    format: ''
-  });
+
+  const [newBook, setNewBook] = useState<Book>(initBook);
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
 
   // Handle form change
-  // const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-  //   setNewBook({
-  //     ...newBook,
-  //     [e.target.name]: e.target.value,
-  //   });
-  // };
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setNewBook({
+      ...newBook,
+      [e.target.name]: e.target.value,
+    });
+  };
 
   // Handle form submission
-  const handleAddBook = () => {
+  const addBook = async () => {
 
-    console.log(newBook);
     //e.preventDefault();
-    // setIsSubmitting(true);
-    // setError('');
+    setIsSubmitting(true);
+    setError('');
 
-    // try {
-    //   const res = await fetch('/api/books', {
-    //     method: 'POST',
-    //     headers: {
-    //       'Content-Type': 'application/json',
-    //     },
-    //     body: JSON.stringify(newBook),
-    //   });
+    try {
+      console.log(newBook);
+      const res = await fetch("http://localhost:3000/api/books", {
+        method: "POST",
+        body: JSON.stringify(newBook),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
 
-    //   const data = await res.json();
-    //   if (!data.success) {
-    //     throw new Error(data.message || 'Failed to create book');
-    //   }
-
-    //   alert('Book created successfully');
-    //   setNewBook({
-    //     title: '',
-    //     authorId: '',
-    //     publisherId: '',
-    //     categoryId: '',
-    //     seriesId: '',
-    //     publicationDate: '',
-    //     isbn: '',
-    //     summary: '',
-    //     coverImageUrl: '',
-    //     fileUrl: '',
-    //     fileSize: '',
-    //     format: ''
-    //   });
-    // } catch (err: any) {
-    //   setError(err.message);
-    // } finally {
-    //   setIsSubmitting(false);
-    // }
+      const result = await res.json();
+      console.log("success"+result.success)
+      if (result.success) {
+        console.log("Book added successfully");
+      } else {
+        setError(result.message || "Failed to add book");
+      }
+    } catch (error) {
+      console.error("Error adding book:", error);
+      setError("An error occurred while adding the book");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -79,14 +57,14 @@ const createBookPage = () => {
 
 
         <p className="text-center text-xl font-bold mb-4">Create New Book</p>
-        {error && <p className="text-red-500">{error}</p>}
+        {/* {error && <p className="text-red-500">{error}</p>} */}
       <div className={styles.wrapperGrid}>
         <Input
           name="title"
           label="Book Title"
           //placeholder="Book title"
           value={newBook.title}
-          onChange={(e) => setNewBook({ ...newBook, title: e.target.value })}
+          onChange={handleChange}
           isRequired
           variant={"bordered"}
           className={" w-5/12"}
@@ -138,7 +116,7 @@ const createBookPage = () => {
           name="isbn"
           label="ISBN"
           value={newBook.isbn}
-          onChange={(e) => setNewBook({ ...newBook, isbn: e.target.value })}
+          onChange={handleChange}
           isRequired
           variant={"bordered"}
           className={"max-w-sm"}
@@ -156,7 +134,7 @@ const createBookPage = () => {
           name="coverImageUrl"
           label="Cover Image URL"
           value={newBook.coverImageUrl}
-          onChange={(e) => setNewBook({ ...newBook, coverImageUrl: e.target.value })}
+          onChange={handleChange}
           variant={"bordered"}
           className={"max-w-sm"}
         />
@@ -192,7 +170,7 @@ const createBookPage = () => {
             type="submit"
             color="primary"
             //disabled={isSubmitting}
-            onClick={(handleAddBook)}
+            onClick={(addBook)}
           >
             {isSubmitting ? 'Creating...' : 'Create Book'}
           </Button>

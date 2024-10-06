@@ -24,7 +24,7 @@ export default function NavBar(props: SwitchProps) {
 
   const handleCheckUser = () => {
     if (checkUser()){
-      console.log(user);
+      //console.log(user);
       setIsDropdownOpen(true);
     } 
     else {

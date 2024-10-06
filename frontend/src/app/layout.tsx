@@ -10,6 +10,11 @@ import { UserProvider } from "./context/UserContext";
 export const metadata: Metadata = {
   title: "Novella",
   description: "For those who explore",
+  manifest:"./public/manifest",
+  icons: [
+    { rel: "apple-touch-icon", url: "icons/icon-128x128.png" },
+    { rel: "icon", url: "icons/icon-128x128.png" },
+  ],
 };
 
 export default function RootLayout({
@@ -20,7 +25,6 @@ export default function RootLayout({
   return (
     <html lang="en" className="">
       <head>
-        <script src="http://localhost:8097"></script>
       </head>
       <body>
         <Providers>

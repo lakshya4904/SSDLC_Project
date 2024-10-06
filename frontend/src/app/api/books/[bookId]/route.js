@@ -1,6 +1,5 @@
 import { connectDB } from '@/lib/db';
 import Book from '@/lib/models/book'; // Make sure your Book model is correctly referenced
-import { NextApiRequest, NextApiResponse } from 'next';
 import { NextResponse } from 'next/server';
 
 
@@ -42,7 +41,7 @@ export async function DELETE(req , res ) {
 
 export async function GET(req, res) {
   const bookId = res.params.bookId;
-
+  
   if (!bookId) {
     return NextResponse.json({ error: 'Book ID is required', success: false });
   }
