@@ -24,7 +24,9 @@
   "include": [
     "next-env.d.ts", // Includes Next.js types
     "**/*.ts", // Includes all TypeScript files
+    "**/*.js", // Includes all JavaScript files
     "**/*.tsx", // Includes all TSX files
+    "**/*.jsx", // Includes all TSX files
     ".next/types/**/*.ts" // Includes Next.js build types
   ],
   "exclude": ["node_modules"] // Excludes node_modules directory

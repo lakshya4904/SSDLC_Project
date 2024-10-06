@@ -16,3 +16,24 @@ export interface Book {
   createdAt?: Date;
   updatedAt?: Date;
 }
+
+export interface BookProps {
+  book: Book;
+}
+
+//make an initialzer for Book interface
+export const initBook: Book = {
+  id: '', // Add the missing id property
+  title: '',
+  authorId: '',
+  publisherId: '',
+  genreId: '',
+  seriesId: '',
+  publicationDate: 0,
+  isbn: '',
+  summary: '',
+  coverImageUrl: '',
+  fileUrl: '',
+  fileSize: 0,
+  format: ''
+};

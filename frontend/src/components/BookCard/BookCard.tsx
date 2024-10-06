@@ -4,14 +4,10 @@ import React from 'react';
 import Image from 'next/image';
 import { FaRegBookmark, FaStar } from "react-icons/fa";
 import Link from 'next/link';
-import { Book } from '../../app/types/book';
+import { Book, BookProps } from '../../app/types/book';
 
 
-interface BookCardProps {
-  book: Book;
-}
-
-const BookCard: React.FC<BookCardProps> = ({ book }) => {
+const BookCard: React.FC<BookProps> = ({ book }) => {
   
 
   return (
