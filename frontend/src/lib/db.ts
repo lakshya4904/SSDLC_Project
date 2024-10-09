@@ -1,8 +1,10 @@
 import mongoose from "mongoose";
+import { GridFSBucket } from 'mongodb';
 import dotenv from "dotenv";
 
-const mongoUri = process.env.MONGO_URI;
 dotenv.config();
+
+let attachmentModel:GridFSBucket;
 
 export const connectDB = async () => {
   try {
@@ -12,10 +14,20 @@ export const connectDB = async () => {
     }
     const con = await mongoose.connect(mongoUri);
     console.log(`MongoDB Connected: ${con.connection.host}`);
+    
+    if (mongoose.connection.db) {
+      attachmentModel = new mongoose.mongo.GridFSBucket(mongoose.connection.db, {
+        bucketName: 'uploads'
+      });
+    } else {
+      throw new Error("Failed to initialize GridFSBucket: mongoose.connection.db is undefined");
+    }
     return true;
-  } catch (error) {
+  } catch (error:any) {
     console.log(`Error: ${error.message}`);
     process.exit(1); // Process code 1 means exit with failure,0 means success
     return false; // This line will never be reached, but it's here for completeness
   }
 }
+
+export { attachmentModel };

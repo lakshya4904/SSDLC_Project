@@ -15,10 +15,13 @@ export default function NavBar(props: SwitchProps) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false); // State to control dropdown visibility
   const router = useRouter();
 
+
+  
   // Effect to reset the dropdown state when user logs out or changes
   useEffect(() => {
     if (!user) {
       setIsDropdownOpen(false); // Close dropdown if user logs out
+      
     }
   }, [user]);
 
@@ -42,7 +45,7 @@ export default function NavBar(props: SwitchProps) {
   };
 
   const currentPath = usePathname();
-  console.log(currentPath);
+  // console.log(currentPath);
 
 
   const links = [
@@ -69,6 +72,8 @@ export default function NavBar(props: SwitchProps) {
     { label: "Dashboard", href: "/Dashboard", display: "hidden", color: "default" },
     // { label: "Log Out", href: "/", display: "block", color: "danger" },
   ];
+
+  
 
   return (
 
