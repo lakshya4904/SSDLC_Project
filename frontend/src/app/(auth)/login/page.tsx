@@ -11,6 +11,7 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const router = useRouter();
   const { setUser } = useUser(); // Using the UserContext
+  const [error, setError] = useState<string | null>(null);
 
   const [isVisible, setIsVisible] = React.useState(false);
 
@@ -21,13 +22,19 @@ const Login = () => {
     // Mock login authentication
     console.log(`email:${email} pwd: ${password}`);
 
-    const response = await fetch(`http://localhost:3000/api/users/${email}`,{
+    const response = await fetch(`http://localhost:3000/api/users?email=${email}`,{
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
       },
     });
     const user = await response.json();
+
+    // console.log('All users:', user.result);
+    // user.result.forEach((user: any) => {
+    //   if (email === user.result.email && password == user.result.password) {}
+    // });
+
 
     if (email === user.result.email && password == user.result.password) {
 
@@ -47,7 +54,7 @@ const Login = () => {
       router.push('/'); // Redirect to homepage or dashboard after login
 
     } else {
-      // console.log('Invalid email or password');
+      console.log('Invalid email or password');
       setError('Invalid email or password');
     }
   };
@@ -57,10 +64,11 @@ const Login = () => {
       <div className="md:w-2/6 border-small rounded-lg p-4 flex flex-col gap-4">
 
         <h2 className='m-4 justify-center flex '>Login</h2>
+        {error && <p className="text-red-500">{error}</p>}
         <Input label="Email"
           variant="bordered"
           placeholder="Enter your email"
-          onChange={(e) => setEmail(e.target.value)}
+          onChange={(e) => setEmail(e.target.value.trim())}
           required
           size='sm'
           className=''

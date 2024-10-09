@@ -4,7 +4,7 @@ import { NextResponse } from 'next/server';
 
 
 // Put API
-export async function PUT(req, res) {
+export async function PUT(req:any, res:any) {
   if (await connectDB()) {
     try {
       const identifier = res.params.identifier;
@@ -23,7 +23,7 @@ export async function PUT(req, res) {
 }
 
 //make a delete api
-export async function DELETE(req , res ) {
+export async function DELETE(req:any , res:any ) {
   if (await connectDB()) {
     try {
       const identifier = res.params.identifier;
@@ -39,25 +39,27 @@ export async function DELETE(req , res ) {
 }
 
 
+export async function GET(req: any, res: any) {
+  if (await connectDB()) {
+    try {
+      const identifier = res.params.identifier;
+      console.log(identifier);
 
-export async function GET(req, res) {
-  try {
-    
-    const identifier = res.params.identifier;
-    console.log(identifier);
-    
-    const user = await User.findOne({
-      $or: [{ username: identifier }, { email: identifier }],
-    });
+      const user = await User.findOne({
+        $or: [{ username: identifier }, { email: identifier }],
+      });
 
-    if (!user) {
-      return NextResponse.json({ error: 'User not found', success: false });
+      if (!user) {
+        return NextResponse.json({ error: 'User not found', success: false });
+      }
+
+      return NextResponse.json({ result: user, success: true });
+    } catch (error) {
+      console.error('Database query error:', error);
+      return NextResponse.json({ error: 'Internal Server Error', success: false });
     }
-
-    return NextResponse.json({ result: user, success: true });
-  } catch (error) {
-    console.error('Database query error:', error);
-    return NextResponse.json({ error: 'Internal Server Error', success: false });
+  } else {
+    return NextResponse.json({ message: 'Database connection failed', success: false });
   }
 }
 

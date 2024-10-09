@@ -18,7 +18,8 @@
       }
     ],
     "paths": {
-      "@/*": ["./src/*"] // Nice, allows absolute imports from `src`
+      "@/*": ["./src/*"], // Nice, allows absolute imports from `src`
+      "mongoose-gridfs": ["./types/mongoose-gridfs.d.ts"]
     }
   },
   "include": [

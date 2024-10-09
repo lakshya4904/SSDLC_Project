@@ -2,12 +2,12 @@
 import { useState } from 'react';
 import { Input, Button, Textarea, Card } from "@nextui-org/react";
 import styles from "./createBook.module.css";
-import { Book, BookProps, initBook } from '@/app/types/book';
+import { IBook, initializeBook } from '@/lib/models/book';
 // import Book from '@/lib/models/book';
 
 const createBookPage = () => {
 
-  const [newBook, setNewBook] = useState<Book>(initBook);
+  const [newBook, setNewBook] = useState<IBook>(initializeBook({}));
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
@@ -63,7 +63,7 @@ const createBookPage = () => {
           name="title"
           label="Book Title"
           //placeholder="Book title"
-          value={newBook.title}
+          value={newBook?.title || ''}
           onChange={handleChange}
           isRequired
           variant={"bordered"}
@@ -115,7 +115,7 @@ const createBookPage = () => {
         <Input
           name="isbn"
           label="ISBN"
-          value={newBook.isbn}
+          value={newBook?.isbn || ''}
           onChange={handleChange}
           isRequired
           variant={"bordered"}
@@ -133,7 +133,7 @@ const createBookPage = () => {
         <Input
           name="coverImageUrl"
           label="Cover Image URL"
-          value={newBook.coverImageUrl}
+          value={newBook?.coverImageURL || ''}
           onChange={handleChange}
           variant={"bordered"}
           className={"max-w-sm"}
