@@ -28,7 +28,8 @@
     "**/*.js", // Includes all JavaScript files
     "**/*.tsx", // Includes all TSX files
     "**/*.jsx", // Includes all TSX files
-    ".next/types/**/*.ts" // Includes Next.js build types
+    ".next/types/**/*.ts", // Includes Next.js build types
+    "public/manifest.json"
   ],
   "exclude": ["node_modules"] // Excludes node_modules directory
 }

@@ -57,7 +57,7 @@ export async function GET(req: any) {
     if (await connectDB()) {
       try {
         // Find the user based on the data passed (e.g., username or email)
-        const user = await User.findOne(Object.keys(query).length > 0 ? query : {})
+        const user = await User.find(Object.keys(query).length > 0 ? query : {})
         .sort(sort && order ? { [sort]: order === 'asc' ? 1 : -1 } : {}) // Sort by rating
         .exec();
 

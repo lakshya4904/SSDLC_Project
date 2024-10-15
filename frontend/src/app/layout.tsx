@@ -10,7 +10,7 @@ import { UserProvider } from "./context/UserContext";
 export const metadata: Metadata = {
   title: "Novella",
   description: "For those who explore",
-  manifest:"./public/manifest",
+  manifest:"/manifest.json",
   icons: [
     { rel: "apple-touch-icon", url: "icons/icon-128x128.png" },
     { rel: "icon", url: "icons/icon-128x128.png" },
@@ -26,7 +26,7 @@ export default function RootLayout({
     <html lang="en" className="">
       <head>
       </head>
-      <body>
+      <body >
         <Providers>
           <UserProvider>
             <NavBar />

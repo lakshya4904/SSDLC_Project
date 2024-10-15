@@ -4,10 +4,14 @@ import React from 'react';
 import Image from 'next/image';
 import { FaRegBookmark, FaStar } from "react-icons/fa";
 import Link from 'next/link';
-import { Book, BookProps } from '../../app/types/book';
+import { IBook } from '@/lib/models/book';
 
 
-const BookCard: React.FC<BookProps> = ({ book }) => {
+interface BookCardProps {
+  book: IBook;
+}
+
+const BookCard: React.FC<BookCardProps> = ({ book }) => {
   
 
   return (
@@ -27,7 +31,7 @@ const BookCard: React.FC<BookProps> = ({ book }) => {
         {/* <CardBody className=""> */}
         {/* Image of the Book */}
         <Image
-          src={book.coverImageUrl}
+          src={book.coverImageId || book.title}
           alt={book.title}
           width={200}
           height={300}
@@ -39,7 +43,7 @@ const BookCard: React.FC<BookProps> = ({ book }) => {
           {/* Book Name */}
           <div className={`w-4/6 overflow-hidden`}>
             <h6 className="line truncate">{book.title?book.title:"Book Title"}</h6>
-            <p className=" text-sm truncate">{book.authorId?book.authorId:"Book Author"}</p>
+            <p className=" text-sm truncate">{book.author?book.author:"Book Author"}</p>
           </div>
           <Button className="text-tiny w-2/6 ml-4 text-white" color="primary" radius="full" size="sm">
           <FaRegBookmark />

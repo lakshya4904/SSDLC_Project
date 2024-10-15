@@ -1,52 +1,74 @@
-'use client';
-import { useState } from 'react';
-import { Input, Button, Textarea, Card } from "@nextui-org/react";
-import styles from "./createBook.module.css";
+"use client";
+import React, { useState } from 'react';
+import { Input, Button, Textarea } from '@nextui-org/react';
+import styles from './createBook.module.css';
 import { IBook, initializeBook } from '@/lib/models/book';
-// import Book from '@/lib/models/book';
 
-const createBookPage = () => {
-
+const Page = () => {
   const [newBook, setNewBook] = useState<IBook>(initializeBook({}));
-
+  const [coverImage, setCoverImage] = useState<File | null>(null);
+  const [bookFile, setBookFile] = useState<File | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
 
-  // Handle form change
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setNewBook({
-      ...newBook,
-      [e.target.name]: e.target.value,
-    });
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setNewBook({ ...newBook, [name]: value });
   };
 
-  // Handle form submission
-  const addBook = async () => {
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+        if (e.target.name === 'file') {
+            setBookFile(file);
+            setNewBook({
+                ...newBook,
+                filename: newBook.title || file.name,
+                format: file.type,
+            });
+        } else if (e.target.name === 'coverImage') {
+            setCoverImage(file);
+        }
+    }
+  };
 
-    //e.preventDefault();
+  const addBook = async () => {
     setIsSubmitting(true);
     setError('');
 
+
     try {
+      const formData = new FormData();
+
+      // Append book fields to FormData
+      for (const key in newBook) {
+        formData.append(key, (newBook as any)[key]);
+      }
+
+      if (coverImage) {
+        const renamedCoverImage = new File([coverImage], newBook.title || coverImage.name, { type: coverImage.type });
+        formData.append('coverImage', renamedCoverImage);
+    }
+
+    // Append the main book file with the new name
+    if (bookFile) {
+        const renamedFile = new File([bookFile], newBook.title || bookFile.name, { type: bookFile.type });
+        formData.append('file', renamedFile);
+    }
+
       console.log(newBook);
       const res = await fetch("http://localhost:3000/api/books", {
         method: "POST",
-        body: JSON.stringify(newBook),
-        headers: {
-          'Content-Type': 'application/json'
-        }
+        body: formData
       });
 
       const result = await res.json();
-      console.log("success"+result.success)
-      if (result.success) {
-        console.log("Book added successfully");
-      } else {
-        setError(result.message || "Failed to add book");
+      console.log("success" + result.success);
+      if (!result.success) {
+        setError(result.message || 'Failed to add book');
       }
-    } catch (error) {
-      console.error("Error adding book:", error);
-      setError("An error occurred while adding the book");
+    } catch (err) {
+      setError('An error occurred');
     } finally {
       setIsSubmitting(false);
     }
@@ -54,133 +76,109 @@ const createBookPage = () => {
 
   return (
     <section className="">
-
-
-        <p className="text-center text-xl font-bold mb-4">Create New Book</p>
-        {/* {error && <p className="text-red-500">{error}</p>} */}
-      <div className={styles.wrapperGrid}>
-        <Input
-          name="title"
-          label="Book Title"
-          //placeholder="Book title"
-          value={newBook?.title || ''}
-          onChange={handleChange}
-          isRequired
-          variant={"bordered"}
-          className={" w-5/12"}
-        />
-        {/* <Input
-          name="authorId"
-          label="Author ID"
-          placeholder="Author ID"
-          value={form.authorId}
-          onChange={handleChange}
-          fullWidth
-          required
-        />
-        <Input
-          name="publisherId"
-          label="Publisher ID"
-          placeholder="Publisher ID"
-          value={form.publisherId}
-          onChange={handleChange}
-          fullWidth
-          required
-        />
-        <Input
-          name="categoryId"
-          label="Category ID"
-          placeholder="Category ID"
-          value={form.categoryId}
-          onChange={handleChange}
-          fullWidth
-          required
-        />
-        <Input
-          name="seriesId"
-          label="Series ID"
-          placeholder="Series ID (Optional)"
-          value={form.seriesId}
-          onChange={handleChange}
-          fullWidth
-        />
-        <Input
-          name="publicationDate"
-          label="Publication Date"
-          type="date"
-          value={form.publicationDate}
-          onChange={handleChange}
-          fullWidth
-        /> */}
-        <Input
-          name="isbn"
-          label="ISBN"
-          value={newBook?.isbn || ''}
-          onChange={handleChange}
-          isRequired
-          variant={"bordered"}
-          className={"max-w-sm"}
-        />
-        {/* <Textarea
+      <p className="text-center text-xl font-bold mb-4">Create New Book</p>
+      <form onSubmit={(e) => { e.preventDefault(); addBook(); }} className="m-5 flex flex-col justify-center gap-3" title='Create New Book'>
+        <div className={styles.wrapperGrid}>
+          <Input
+            name="title"
+            label="Book Title"
+            value={newBook?.title || ''}
+            onChange={handleInputChange}
+            required
+            variant='bordered'
+            className="max-w-sm"
+          />
+          <Input
+            name="authors"
+            label="Authors"
+            value={newBook?.author || ''}
+            onChange={handleInputChange}
+            variant='bordered'
+            className="max-w-sm"
+          />
+          <Input
+            name="publishers"
+            label="Publishers"
+            value={newBook?.publishers || ''}
+            onChange={handleInputChange}
+            variant='bordered'
+            className="max-w-sm"
+          />
+          <Input
+            name="series"
+            label="Series"
+            value={newBook?.series || ''}
+            onChange={handleInputChange}
+            variant='bordered'
+            className="max-w-sm"
+          />
+          <Input
+            type="date"
+            name="publishedDate"
+            label="Published Date"
+            value={newBook?.publishedDate ? newBook.publishedDate.toISOString().split('T')[0] : ''}
+            onChange={handleInputChange}
+            variant='bordered'
+            className="max-w-sm"
+          />
+          <Input
+            name="isbn"
+            label="ISBN"
+            value={newBook?.isbn || ''}
+            onChange={handleInputChange}
+            variant='bordered'
+            className="max-w-sm"
+          />
+          <Input
+            type="file"
+            name="coverImage"
+            label="Upload Cover Image"
+            onChange={handleFileChange}
+            variant='bordered'
+            className="max-w-sm"
+          />
+          <Input
+            type="file"
+            name="file"
+            label="Upload File"
+            onChange={handleFileChange}
+            variant='bordered'
+            className="max-w-sm"
+          />
+          <Input
+            name="filename"
+            label="Filename"
+            value={newBook?.filename || ''}
+            readOnly
+            variant='bordered'
+            className="max-w-sm"
+          />
+          <Input
+            name="format"
+            label="Format"
+            value={newBook?.format || ''}
+            readOnly
+            variant='bordered'
+            className="max-w-sm"
+          />
+          {error && <p className="text-red-500">{error}</p>}
+        </div>
+        <Textarea
           name="summary"
           label="Summary"
-          placeholder="Book summary"
-          value={form.summary}
-          onChange={handleChange}
-          fullWidth
-          required
-        /> */}
-        <Input
-          name="coverImageUrl"
-          label="Cover Image URL"
-          value={newBook?.coverImageURL || ''}
-          onChange={handleChange}
-          variant={"bordered"}
-          className={"max-w-sm"}
+          value={newBook?.summary || ''}
+          onChange={handleInputChange}
+          variant='bordered'
+          className=""
         />
-        {/* <Input
-          name="fileUrl"
-          label="File URL"
-          placeholder="File URL"
-          value={form.fileUrl}
-          onChange={handleChange}
-          fullWidth
-          required
-        />
-        <Input
-          name="fileSize"
-          label="File Size (MB)"
-          placeholder="File Size"
-          value={form.fileSize}
-          onChange={handleChange}
-          fullWidth
-          required
-        />
-        <Input
-          name="format"
-          label="Format (e.g. pdf, epub)"
-          placeholder="Format"
-          value={form.format}
-          onChange={handleChange}
-          fullWidth
-          required
-        /> */}
-        <div className={"flex items-center w-full"}>
-          <Button
-            type="submit"
-            color="primary"
-            //disabled={isSubmitting}
-            onClick={(addBook)}
-          >
-            {isSubmitting ? 'Creating...' : 'Create Book'}
-          </Button>
+
+        <div className='flex justify-center'>
+          <Button onClick={addBook} disabled={isSubmitting} color='primary' size='lg'>Add Book</Button>
         </div>
+      </form>
 
-      </div>
     </section>
-
   );
 };
 
-
-export default createBookPage;
+export default Page;

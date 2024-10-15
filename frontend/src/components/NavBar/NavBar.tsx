@@ -1,48 +1,18 @@
 'use client';
 import React, { useEffect, useState } from "react";
 import { Navbar, NavbarBrand, NavbarContent, NavbarItem, NavbarMenuToggle, NavbarMenu, NavbarMenuItem, Link, Button, DropdownItem, DropdownTrigger, DropdownMenu, Avatar, Dropdown, Input, SwitchProps, useSwitch, VisuallyHidden, DropdownSection } from "@nextui-org/react";
-import { SearchIcon } from "./SearchIcon";
 import { ThemeSwitcher } from "../ThemeSwitcher";
 import { usePathname } from "next/navigation";
 import styles from "./NavBar.module.css";
 import { useRouter } from 'next/navigation';
 import { useUser } from "@/app/context/UserContext";
+import ProfileDropdown from "./ProfileDropdown";
+import SearchBar from "./SearchBar";
 
 export default function NavBar(props: SwitchProps) {
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
 
-  const { user, logout, checkUser } = useUser();
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false); // State to control dropdown visibility
-  const router = useRouter();
-
-
-  
-  // Effect to reset the dropdown state when user logs out or changes
-  useEffect(() => {
-    if (!user) {
-      setIsDropdownOpen(false); // Close dropdown if user logs out
-      
-    }
-  }, [user]);
-
-  const handleCheckUser = () => {
-    if (checkUser()){
-      //console.log(user);
-      setIsDropdownOpen(true);
-    } 
-    else {
-      // Redirect to login if the user is not logged in
-      // This is a place to use next/navigation's redirect()
-      setIsDropdownOpen(false);
-      router.push("/login");
-    }
-  };
-
-  const handleLogout = () => {
-    logout(); // Perform logout logic
-    setIsDropdownOpen(false); // Close dropdown when logging out
-    //router.push('/login'); // Redirect to login page
-  };
+  const { user } = useUser();
 
   const currentPath = usePathname();
   // console.log(currentPath);
@@ -51,7 +21,7 @@ export default function NavBar(props: SwitchProps) {
   const links = [
     { label: "User", href: "/user", display: "block" },
     { label: "Settings", href: "/settings", display: "block" },
-    { label: "Dashboard", href: "/dashboard", display: "block" },
+    { label: "Dashboard", href: "/dashboard", display: `${(user?.type == "admin") ? "block": " hidden"}` },
   ];
 
   const {
@@ -62,18 +32,6 @@ export default function NavBar(props: SwitchProps) {
     getInputProps,
     getWrapperProps
   } = useSwitch(props);
-
-  type MenuItemColor = "default" | "danger" | "primary" | "secondary" | "success" | "warning";
-
-  const AvatarItems: { label: string; href: string; display: string; color: MenuItemColor }[] = [
-    { label: "Account", href: "/Account", display: "block", color: "default" },
-    { label: "Bookmarks", href: "/Bookmarks", display: "block", color: "default" },
-    { label: "Settings", href: "/Settings", display: "block", color: "default" },
-    { label: "Dashboard", href: "/Dashboard", display: "hidden", color: "default" },
-    // { label: "Log Out", href: "/", display: "block", color: "danger" },
-  ];
-
-  
 
   return (
 
@@ -113,12 +71,7 @@ export default function NavBar(props: SwitchProps) {
       </NavbarContent>
 
       <NavbarContent as="div" className={`!flex-auto`} >
-        <Input
-          className={`${styles.menuSearchBar} `}
-          placeholder="Type to search..."
-          startContent={<SearchIcon size={18} />}
-          type="search"
-        />
+      <SearchBar/>
       </NavbarContent >
 
       <NavbarContent as="div" className="items-center !flex-auto" justify="end">
@@ -149,43 +102,7 @@ export default function NavBar(props: SwitchProps) {
           <ThemeSwitcher />
         </NavbarContent> */}
         {/* Avatar */}
-        <Dropdown placement="bottom-end" className={isSelected ? "hidden" : ""} >
-          <DropdownTrigger>
-            <Avatar
-              isBordered = {user? true : false}
-              showFallback  = {user? true : false}
-              as="button"
-              className={`transition-transform ${isSelected ? "hidden" : ""}`}
-              color = {user? "primary" : "default"}
-              name={user?.username}
-              size="sm"
-              onClick={handleCheckUser}
-              src={user?.profileImageURL}
-            />
-          </DropdownTrigger>
-          {isDropdownOpen && (
-        <DropdownMenu aria-label="Profile Actions" variant="flat">
-          <DropdownItem>
-            <ThemeSwitcher />
-          </DropdownItem>
-          <DropdownSection>
-            {AvatarItems.map((item) => (
-              <DropdownItem
-                key={item.href}
-                href={item.href}
-                className={`${item.display} ${item.href === currentPath ? 'text-primary' : 'text-default-900'}`}
-                color={item.color}
-              >
-                {item.label}
-              </DropdownItem>
-            ))}
-          </DropdownSection>
-          <DropdownItem key="logout" color="danger" onClick={handleLogout}>
-            Log Out
-          </DropdownItem>
-        </DropdownMenu>
-      )}
-        </Dropdown>
+        <ProfileDropdown/>
         {/* <NavbarItem className="lg:flex hidden">
           <Link href="#">Login</Link>
         </NavbarItem>

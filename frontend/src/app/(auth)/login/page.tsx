@@ -9,6 +9,7 @@ import { useUser } from '@/app/context/UserContext';
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [rememberMe, setRememberMe] = useState(false);
   const router = useRouter();
   const { setUser } = useUser(); // Using the UserContext
   const [error, setError] = useState<string | null>(null);
@@ -30,31 +31,28 @@ const Login = () => {
     });
     const user = await response.json();
 
-    // console.log('All users:', user.result);
-    // user.result.forEach((user: any) => {
-    //   if (email === user.result.email && password == user.result.password) {}
-    // });
+    // user will be array of User. check if email is present in user array
+    const foundUser = user.result.find((u: any) => u.email === email);
 
+    if (foundUser) {
+      // if present, check if password is correct
+      if (foundUser.password === password) {
+        // if correct, set user in global context and redirect to homepage
+        setUser(foundUser);
 
-    if (email === user.result.email && password == user.result.password) {
+        if (rememberMe) {
+          const expiryDate = new Date();
+          expiryDate.setDate(expiryDate.getDate() + 30);
+          localStorage.setItem('user', JSON.stringify({ ...foundUser, expiry: expiryDate }));
+        }
 
-      // const mockUser: User = {
-      //   id: 1,
-      //   username: 'John Doe',
-      //   profileImageURL: 'https://i.pravatar.cc/150?u=a042581f4e29026704d',
-      //   email: email,
-      //   password: password,
-      //   createdAt: new Date(),
-      //   updatedAt: new Date(),
-      //   type: ''
-      // };
-
-      // console.log('correct email and password');
-      setUser(user); // Save user in global context and localStorage
-      router.push('/'); // Redirect to homepage or dashboard after login
-
+        router.push('/');
+      } else {
+        // if incorrect, show error message
+        setError('Invalid email or password');
+      }
     } else {
-      console.log('Invalid email or password');
+      // if email is not present, show error message
       setError('Invalid email or password');
     }
   };
@@ -93,7 +91,9 @@ const Login = () => {
           required
         />
         <div className="flex justify-between">
-            <Checkbox type="checkbox">
+            <Checkbox type="checkbox"
+            checked={rememberMe}
+            onChange={(e) => setRememberMe(e.target.checked)}>
               <span className="">Remember me</span>
             </Checkbox>
           <Link href={"/forgot-password"} className='underline hover:text-blue-500 duration-300'>Forgot Password?</Link>
@@ -121,4 +121,3 @@ export default Login;
 function setError(arg0: string) {
   throw new Error(arg0 ||'Function not implemented.');
 }
-

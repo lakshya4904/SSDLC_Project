@@ -1,22 +1,16 @@
 'use client';
 import { createContext, useContext, useEffect, useState } from 'react';
 import { User } from '../types/user';
- // Adjust this to the actual path
 
 interface UserContextType {
   user: User | null;
   setUser: (user: User | null) => void;
   logout: () => void;
-  checkUser: () => boolean; // Default implementation
+  checkUser: () => boolean;
 }
 
 // Create User Context
-const UserContext = createContext<UserContextType | undefined>({
-  user: null,
-  setUser: () => {},
-  logout: () => {},
-  checkUser: () => false, // Default implementation
-});
+const UserContext = createContext<UserContextType | undefined>(undefined);
 
 export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUserState] = useState<User | null>(null);
@@ -24,6 +18,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
   // Set user both in the context and cache it
   const setUser = (user: User | null) => {
     if (user) {
+      console.log(user);
       localStorage.setItem('user', JSON.stringify(user));
     } else {
       localStorage.removeItem('user');
@@ -38,6 +33,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const logout = () => {
     setUser(null);
+    localStorage.removeItem('user');
   };
 
   useEffect(() => {
