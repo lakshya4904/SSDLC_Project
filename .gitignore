@@ -1,30 +1,36 @@
-# Node modules
-node_modules/
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
-# Logs
-logs/
-*.log
-npm-debug.log*
+# dependencies
+/node_modules
+/.pnp
+.pnp.js
+.yarn/install-state.gz
 
-# Dependency directories
-jspm_packages/
+# testing
+/coverage
 
-# Build directories
-dist/
-build/
+# next.js
+/.next/
+/out/
 
-# Temporary files
-tmp/
-temp/
+# production
+/build
 
-# Environment variables
-#.env
-
-# IDE specific files
-.vscode/
-.idea/
-
-# OS generated files
+# misc
 .DS_Store
-Thumbs.db
+*.pem
 
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# local env files
+.env*.local
+
+# vercel
+.vercel
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts

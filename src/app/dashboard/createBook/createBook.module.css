@@ -1,0 +1,10 @@
+
+/* .wrapperGrid{
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  background-color: #d3d3d3;
+} */
+.wrapperGrid{
+  @apply grid md:grid-cols-2 gap-3 ;
+}
