@@ -36,7 +36,7 @@ const Login = () => {
 
     if (foundUser) {
       // if present, check if password is correct
-      if (foundUser.password === password) {
+      if (foundUser.password == password) {
         // if correct, set user in global context and redirect to homepage
         setUser(foundUser);
 
@@ -58,8 +58,8 @@ const Login = () => {
   };
 
   return (
-    <div className="flex items-center justify-center h-[90vh]">
-      <div className="md:w-2/6 border-small rounded-lg p-4 flex flex-col gap-4">
+    <div className="flex items-center justify-center content-center h-[90vh]">
+      <div className="w-11/12 sm:w-3/6 lg:w-2/6 border-small rounded-lg p-4 flex flex-col gap-4">
 
         <h2 className='m-4 justify-center flex '>Login</h2>
         {error && <p className="text-red-500">{error}</p>}
@@ -98,7 +98,7 @@ const Login = () => {
             </Checkbox>
           <Link href={"/forgot-password"} className='underline hover:text-blue-500 duration-300'>Forgot Password?</Link>
         </div>
-        <Button className="primary_button" type="submit" onClick={handleLogin}>Login</Button>
+        <Button className="" color='primary'  type="submit" onClick={handleLogin}>Login</Button>
 
         <div className="flex justify-center">
           <span>Don't have an account,&nbsp;

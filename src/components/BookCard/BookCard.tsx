@@ -4,19 +4,14 @@ import React from 'react';
 import Image from 'next/image';
 import { FaRegBookmark, FaStar } from "react-icons/fa";
 import Link from 'next/link';
-import { IBook } from '@/lib/models/book';
 
 
-interface BookCardProps {
-  book: IBook;
-}
 
-const BookCard: React.FC<BookCardProps> = ({ book }) => {
+const BookCard = ({ book }: any) => {
   
-
   return (
-    <Link href={`book/${book.id}`} >
-      <Card isFooterBlurred className="w-full h-full shadow-lg hover:shadow-xl transition-shadow container hover:scale-110 ease-in-out duration-300 " radius='lg'>
+    <Link href={`book/${book._id}`} >
+      <Card isFooterBlurred className="h-full shadow-lg hover:shadow-xl transition-shadow container hover:scale-110 ease-in-out duration-300 aspect-novel" radius='lg'>
         <CardHeader className="absolute z-10 flex justify-between items-start">
           <div className='flex-col'>
             
@@ -31,22 +26,24 @@ const BookCard: React.FC<BookCardProps> = ({ book }) => {
         {/* <CardBody className=""> */}
         {/* Image of the Book */}
         <Image
-          src={book.coverImageId || book.title}
+          src={book.coverImage}
           alt={book.title}
-          width={200}
-          height={300}
-
-          className="z-0 w-full h-full scale-125 -translate-y-6 object-cover flex-wrap "
+          // width={200}
+          // height={'450'}
+          fill
+          loading='lazy'
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          className="z-0"
         />
         {/* </CardBody> */}
         <CardFooter className="flex absolute bottom-0 justify-between items-center p-4 bg-default-100 opacity-90">
           {/* Book Name */}
-          <div className={`w-4/6 overflow-hidden`}>
+          <div className={`w-5/6 overflow-hidden`}>
             <h6 className="line truncate">{book.title?book.title:"Book Title"}</h6>
             <p className=" text-sm truncate">{book.author?book.author:"Book Author"}</p>
           </div>
-          <Button className="text-tiny w-2/6 ml-4 text-white" color="primary" radius="full" size="sm">
-          <FaRegBookmark />
+          <Button isIconOnly className="text-tiny ml-4 !aspect-square text-white" color="primary" radius="full" size="sm">
+          <FaRegBookmark size={'18px'} />
           </Button>
           {/* <p className="font-semibold text-center text-lg">{"bookName"}</p> */}
         </CardFooter>

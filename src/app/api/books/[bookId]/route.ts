@@ -10,11 +10,11 @@ import { Readable } from 'stream';
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
-export const config = {
-  api: {
-    bodyParser: false, // Disable body parser for file uploads
-  },
-};
+// export const config = {
+//   api: {
+//     bodyParser: false, // Disable body parser for file uploads
+//   },
+// };
 
 // Helper function to parse form data and handle file upload
 async function parseForm(req: any,res:any): Promise<{ fields: any; file: any }> {

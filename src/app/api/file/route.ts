@@ -10,7 +10,7 @@ const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
 // Middleware to handle file uploads in the POST request
-export const config = {};
+// export const config = {};
 
 // Helper function to handle parsing the form data with multer
 async function parseForm(req: any, res: any): Promise<{ fields: any; coverImage: any; file: any }> {

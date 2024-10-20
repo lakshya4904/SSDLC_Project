@@ -71,6 +71,7 @@ const config: Config = {
         image: '3 / 4',
         'h-image': '4 / 3',
         'blog-image': '16/9',
+        'novel':'2/3',
       },
       screens:{
         // '3xs': '320px',  // Very small mobile devices

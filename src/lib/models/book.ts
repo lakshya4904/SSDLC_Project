@@ -1,47 +1,42 @@
 import mongoose, { Schema, Document, Types }from "mongoose";
+// import  connectDB  from "../db";
 
 // Define the interface for the Book document
 export interface IBook {
   id: Types.ObjectId;
   title: string;
   author: string;
-  publishers: string;
+  publisher: string;
   series: string;
   isbn: string;
   summary: string;
   publishedDate: Date;
-  coverImageId?: string;
-  fileId?: mongoose.Types.ObjectId;
-  filename?: string;
-  format?: string;
+  coverImage?: string;
+  file?: string;
   genres: Types.ObjectId[]; // Store an array of ObjectId referencing the Genre collection
   rating:number;
   createdAt: Date;
   updatedAt: Date;
 }
 
-const bookSchema = new mongoose.Schema({
+export const BookSchema: Schema = new Schema({
   title:            { type: String, trim: true },
-  author:           { type: String, default: null, trim: true },
-  publishers:       { type: String, default: null, trim: true },
-  series:           { type: String, default: null, trim: true },
-  genres:           [{ type: Schema.Types.ObjectId, default: null, ref: 'Genre' }],
-  publishedDate:    { type: Date, default: null},
-  isbn:             { type: String, default: null, trim: true },
-  summary:          { type: String, default: null, trim: true },
-  rating:           { type: Number, default: null, trim: true },
-  coverImageId:     { type: Schema.Types.ObjectId, default: null, trim: true },
-  fileId:           { type: Schema.Types.ObjectId, default: null, trim: true },
-  filename:         { type: String },
-  format:           { type: String, default: null, trim: true }
-},
-{
-    timestamps: true //createdAt, updatedAt
-}
-);
+  author:           { type: String, trim: true },
+  publisher:        { type: String, trim: true },
+  series:           { type: String, trim: true },
+  genres:           [{ type: Schema.Types.ObjectId, ref: 'Genre' }],
+  publishedDate:    { type: String, default: null },
+  isbn:             { type: String, trim: true },
+  summary:          { type: String, trim: true },
+  rating:           { type: Number, default:0.0 },
+  coverImage:       { type: String, trim: true },
+  file:             { type: String, trim: true },
+}, {
+  timestamps: true // createdAt, updatedAt
+});
 
 // Compile model from schema
-const Book = mongoose.model('Book', bookSchema);
+const Book = mongoose.models.Book || mongoose.model<IBook>('Book', BookSchema);
 
 export default Book;
 
@@ -51,16 +46,14 @@ export const initializeBook = (data: Partial<IBook>): IBook => {
     id: data.id || new Types.ObjectId(),
     title: data.title || '',
     author: data.author || '',
-    publishers: data.publishers || '',
+    publisher: data.publisher || '',
     series: data.series || '',
     isbn: data.isbn || '',
     summary: data.summary || '',
     rating: data.rating || 0,
     publishedDate: data.publishedDate || new Date(),
-    coverImageId: data.coverImageId || '',
-    fileId: data.fileId || new Types.ObjectId(),
-    filename: data.filename || '',
-    format: data.format || '',
+    coverImage: data.coverImage || '',
+    file: data.file || '',
     genres: data.genres || [new Types.ObjectId()],
     createdAt: data.createdAt || new Date(),
     updatedAt: data.updatedAt || new Date()
