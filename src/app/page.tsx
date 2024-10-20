@@ -1,24 +1,32 @@
-import Link from "next/link";
-import { Button } from '@nextui-org/button';
+// 'use client'
 import BookCard from "../components/BookCard/BookCard";
 import styles from "./index.module.css";
-import books from "./types/book";
+import { useEffect, useState } from "react";
 
+async function fetchBooks() {
+  const response = await fetch('http://localhost:3000/api/books', {
+    method: 'GET'
+  });
+  const result = await response.json();
 
-export default function Home() {
+  const data = result.data || [];
+  // console.log(data);
+  
+  return data;
+};
+
+export default async function Home() {
+  const books = await fetchBooks();
+
   return (
-    <main className="">
-      {/* <h1>Hello World</h1> */}
-
       <div className="">
-        <h3 className="my-4 border-default border-b-2">Recents</h3>
+        <h3 className="py-4 border-default border-b-2">Recents</h3>
         <br className=" "/>
         <div className={styles.bookRoll}>
           {books.map((book) => (
-            <BookCard key={book.id.toString()} book={book} />
+            <BookCard key={book._id ? book._id.toString() : Math.random().toString()} book={book} />
           ))}
         </div>
       </div>
-    </main>
   );
 }

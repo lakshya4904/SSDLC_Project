@@ -10,12 +10,12 @@ const SearchBar = () => {
 
   const handleSearch = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
+      if(searchValue.trim().length === 0) return ;
       //const query = searchValue.trim() ? { title: searchValue.trim() } : {};
-      const searchTerms = ['title', 'author', 'genres', 'rating'];
-      const firstWord = searchValue.trim().split(' ')[0];
-      const query = searchTerms.includes(firstWord) ? searchValue.trim() : `title = ${searchValue.trim()}`;
-      console.log(`/search?${encodeURIComponent(query)}`);
-      router.push(`/search?${encodeURIComponent(query)}`);
+      const searchTerms = ['title', 'author', 'genre', 'rating'];
+      const firstWord = searchValue.trim().split('=')[0];
+      const query = searchTerms.includes(firstWord) ? searchValue.trim() : `title=${searchValue.trim()}`;
+      router.push(`/search?${query}`);
     }
   };
 

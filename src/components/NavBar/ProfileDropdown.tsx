@@ -54,7 +54,7 @@ export default function ProfileDropdown() {
               as="button"
               className={`transition-transform cursor-pointer `}
               color = {user? "primary" : "default"}
-              name={user?.username}
+              name={user?.username.at(0)?.toLocaleUpperCase()}
               size="sm"
               src={user?.profileImageURL}
             />

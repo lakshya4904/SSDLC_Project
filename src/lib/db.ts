@@ -4,7 +4,6 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-let attachmentModel:GridFSBucket;
 
 export const connectDB = async () => {
   try {
@@ -16,9 +15,7 @@ export const connectDB = async () => {
     console.log(`MongoDB Connected: ${con.connection.host}`);
     
     if (mongoose.connection.db) {
-      attachmentModel = new mongoose.mongo.GridFSBucket(mongoose.connection.db, {
-        bucketName: 'uploads'
-      });
+      
     } else {
       throw new Error("Failed to initialize GridFSBucket: mongoose.connection.db is undefined");
     }
@@ -29,5 +26,3 @@ export const connectDB = async () => {
     return false; // This line will never be reached, but it's here for completeness
   }
 }
-
-export { attachmentModel };

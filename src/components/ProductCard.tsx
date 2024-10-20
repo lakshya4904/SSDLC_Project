@@ -1,7 +1,6 @@
 import React from 'react'
 import AddToCart from './AddToCart'
 import { Card, CardHeader, CardBody, Image, CardFooter } from "@nextui-org/react";
-import Book from "../../../backend/models/book.model.js";
 
 const ProductCard = async () => {
   //const res = await fetch('http://localhost:4904/api/books',{cache : 'no-store'});
